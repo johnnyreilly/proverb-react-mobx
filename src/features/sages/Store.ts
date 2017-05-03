@@ -1,44 +1,25 @@
-import { Dispatcher } from "flux";
+import {observable} from "mobx";
 
-import FluxStore from "../../shared/stores/FluxStore";
-import { SageActionTypes } from "../../shared/actions/sageActions";
-import { Action } from "../../shared/domain/action";
 import { SageVM } from "../../shared/domain/dtos/sage";
-import AppDispatcher from "../../shared/AppDispatcher";
+import * as sageService from "../../shared/services/sageService";
 
 export interface SagesState {
   sages: Map<number, SageVM>;
   isInitialised: boolean;
 }
 
-class SagesStore extends FluxStore<SagesState> {
-  constructor(dispatcher: Dispatcher<Action>) {
-    super(dispatcher, () => ({
-      sages: new Map(),
-      isInitialised: false
-    }));
-  }
+class SagesStore {
+  @observable sages = new Map<number, SageVM>();
+  @observable isInitialised = false;
 
-  getState() {
-    return this._state;
-  }
-
-  _updateSages = (updatedSages: Map<number, SageVM>) => {
-    this._state = Object.assign({}, this._state, { sages: updatedSages, isInitialised: true });
-    this.emitChange();
-  }
-
-  _onDispatch(action: Action) {
-    const updateSages = this._updateSages;
-
-    switch (action.type) {
-      case SageActionTypes.LOADED_SAGES:
-        const sages = action.payload as SageVM[];
-        updateSages(new Map([...sages.map(sage => [sage.id, sage] as [number, SageVM])]));
-        break;
-    }
+  load() {
+    sageService.getAll()
+      .then(sages => {
+        this.isInitialised = true;
+        this.sages = new Map([...sages.map(sage => [sage.id, sage] as [number, SageVM])]);
+      });
   }
 }
 
-const sagesStoreInstance = new SagesStore(AppDispatcher);
+const sagesStoreInstance = new SagesStore();
 export default sagesStoreInstance;
