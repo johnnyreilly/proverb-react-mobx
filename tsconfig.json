@@ -2,6 +2,7 @@
    "compilerOptions": {
       "allowJs": false,
       "allowSyntheticDefaultImports": true,
+      "experimentalDecorators": true,
       "lib": ["dom", "es2015", "es2016"],
       "target": "es2016",
       "module": "es2015",
