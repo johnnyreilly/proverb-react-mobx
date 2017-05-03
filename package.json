@@ -1,5 +1,5 @@
 {
-  "name": "proverb-react",
+  "name": "proverb-react-mobx",
   "version": "1.0.0",
   "description": "Proverb is a simple app that stores the wise sayings of sages.  This is a collection of variations upon a the proverb theme.  Different versions of \"Proverb\" built using different technologies and techniques for kicks and giggles.  It's a playground for me.",
   "main": "/",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/johnnyreilly/proverb-react.git"
+    "url": "https://github.com/johnnyreilly/proverb-react-mobx.git"
   },
   "author": "John Reilly",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/johnnyreilly/proverb-react/issues"
+    "url": "https://github.com/johnnyreilly/proverb-react-mobx/issues"
   },
-  "homepage": "https://github.com/johnnyreilly/proverb-react",
+  "homepage": "https://github.com/johnnyreilly/proverb-react-mobx",
   "devDependencies": {
     "@types/fbemitter": "^2.0.32",
     "@types/flux": "^3.0.1",

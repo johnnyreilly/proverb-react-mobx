@@ -1,6 +1,6 @@
 # Proverb React
 
-[![Build Status](https://ci.appveyor.com/api/projects/status/github/johnnyreilly/proverb-react?svg=true)](https://ci.appveyor.com/project/JohnReilly/proverb-react) [![TypeScript definitions on DefinitelyTyped](http://definitelytyped.org/badges/standard-flat.svg)](http://definitelytyped.org)
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/johnnyreilly/proverb-react-mobx?svg=true)](https://ci.appveyor.com/project/JohnReilly/proverb-react-mobx) [![TypeScript definitions on DefinitelyTyped](http://definitelytyped.org/badges/standard-flat.svg)](http://definitelytyped.org)
 
 Proverb is a simple app that stores the wise sayings of sages.  Most notably those of "Socrates" Aruldas.
 
