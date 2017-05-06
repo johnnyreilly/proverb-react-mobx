@@ -12,13 +12,13 @@ type Props = RouteComponentProps<{}> & { appState: AppState };
 export default class Dashboard extends React.Component<Props, undefined> {
   componentDidMount() {
     const { appState } = this.props;
-    if (!appState.isInitialised) {
+    if (!appState.sagesIsInitialised) {
       appState.loadSages();
     }
   }
 
   render() {
-    const { isInitialised, sages } = this.props.appState;
+    const { sagesIsInitialised, sages } = this.props.appState;
 
     return (
       <div className="container">
@@ -44,9 +44,9 @@ export default class Dashboard extends React.Component<Props, undefined> {
                 </tr>
               </thead>
               <tbody>
-                {isInitialised
+                {sagesIsInitialised
                   ? [...sages.values()].map(sage => (
-                    <tr>
+                    <tr key={sage.id}>
                       <td><Link to={`/sayings/${sage.id}`}>{ sage.name }</Link></td>
                       <td>{ sage.userName }</td>
                     </tr>

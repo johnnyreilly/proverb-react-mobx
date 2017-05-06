@@ -5,12 +5,12 @@ import * as sageService from "./shared/services/sageService";
 
 export default class AppState {
   @observable sages = new Map<number, SageVM>();
-  @observable isInitialised = false;
+  @observable sagesIsInitialised = false;
 
   @action loadSages() {
     sageService.getAll()
       .then(sages => {
-        this.isInitialised = true;
+        this.sagesIsInitialised = true;
         this.sages = new Map([...sages.map(sage => [sage.id, sage] as [number, SageVM])]);
       });
   }

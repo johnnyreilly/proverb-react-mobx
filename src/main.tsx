@@ -1,7 +1,7 @@
 import "babel-polyfill";
 import React from "react";
 import ReactDOM from "react-dom";
-import { HashRouter } from "react-router-dom";
+import { HashRouter, Route } from "react-router-dom";
 import { Provider } from "mobx-react";
 
 import App from "./features/layout/App";
@@ -14,7 +14,7 @@ const appState = new AppState();
 ReactDOM.render((
   <HashRouter>
     <Provider appState={appState}>
-      <App />
+      <Route component={App} />
     </Provider>
   </HashRouter>
 ), document.getElementById("content"));
