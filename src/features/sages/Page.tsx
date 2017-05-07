@@ -2,24 +2,24 @@ import React from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { inject, observer } from "mobx-react";
 
-import AppState from "../../appState";
-import Waiting from "../../shared/components/Waiting";
 import SageThumbnail from "./SageThumbnail";
+import { SageStore } from "../../shared/stores/SageStore";
+import Waiting from "../../shared/components/Waiting";
 
-type Props = RouteComponentProps<{}> & { appState: AppState };
+type Props = RouteComponentProps<{}> & { sageStore: SageStore };
 
-@inject("appState")
+@inject("sageStore")
 @observer
 export default class Sages extends React.Component<Props, undefined> {
   componentDidMount() {
-    const { appState } = this.props;
-    if (!appState.sagesIsInitialised) {
-      appState.loadSages();
+    const { sageStore } = this.props;
+    if (!sageStore.sagesIsInitialised) {
+      sageStore.loadSages();
     }
   }
 
   render() {
-    const { sagesIsInitialised, sages } = this.props.appState;
+    const { sagesIsInitialised, sages } = this.props.sageStore;
 
     return (
       <div className="container">

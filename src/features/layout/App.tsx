@@ -1,7 +1,7 @@
 import React from "react";
 import TopNav from "./TopNav";
 import { RouteComponentProps, Route, Switch } from "react-router-dom";
-import { inject, observer } from "mobx-react";
+import { observer } from "mobx-react";
 
 import Dashboard from "../dashboard/Page";
 import Sages from "../sages/Page";
@@ -11,7 +11,6 @@ import Sages from "../sages/Page";
 // import SayingDetail from "../saying/detail/Page";
 // import SayingEdit from "../saying/edit/Page";
 // import About from "../about/Page";
-import AppState from "../../appState";
 
           // <Route path="/sage/detail/:id" component={SageDetail} />
           // <Route path="/sage/edit/:id" component={SageEdit} />
@@ -21,9 +20,8 @@ import AppState from "../../appState";
           // <Route path="/about" component={About} />
 
 
-type Props = RouteComponentProps<{}> & { appState: AppState };
+type Props = RouteComponentProps<{}>;
 
-@inject("appState")
 @observer
 export default class App extends React.Component<Props, any> {
   shouldComponentUpdate(nextProps: Props) {
