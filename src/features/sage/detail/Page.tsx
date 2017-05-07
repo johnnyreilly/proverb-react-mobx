@@ -1,69 +1,34 @@
 import React from "react";
 import { Link, RouteComponentProps } from "react-router-dom";
-import FBEmitter from "fbemitter";
+import { inject, observer } from "mobx-react";
 import moment from "moment";
 
-import SageStore, { SageState } from "../Store";
-import * as SageActions from "../../../shared/actions/sageActions";
-import Waiting from "../../../shared/components/Waiting";
-import { SageVM } from "../../../shared/domain/dtos/sage";
 import DetailControls from "../../../shared/components/DetailControls";
+import { SelectedSageStore } from "../../../shared/stores/SelectedSageStore";
+import Waiting from "../../../shared/components/Waiting";
 
 type Props = RouteComponentProps<{
   id: string;
-}>;
+}> & { selectedSageStore: SelectedSageStore };
 
-interface State {
-  sage: SageVM | undefined;
-}
-
-export default class SageDetail extends React.Component<Props, State> {
-  eventSubscription: FBEmitter.EventSubscription;
-  constructor(props: Props) {
-    super(props);
-    this.state = this.getSageFromStore(props.match.params.id, SageStore.getState());
-  }
-
-  _onChange = () => {
-    this.setState((prevState, props) => Object.assign(
-      prevState,
-      this.getSageFromStore(props.match.params.id, SageStore.getState())
-    ));
-  }
-
-  getSageFromStore(id: string, state: SageState) {
-    const idNum = parseInt(id);
-    return state.sage && state.sage.id === idNum
-      ? { sage: state.sage }
-      : { sage: undefined };
-  }
-
-  componentWillMount() {
-    this.eventSubscription = SageStore.addChangeListener(this._onChange);
-  }
-
-  componentWillUnmount() {
-    this.eventSubscription.remove();
-  }
-
+@inject("selectedSageStore")
+@observer
+export default class SageDetail extends React.Component<Props, undefined> {
   componentDidMount() {
-    if (!this.state.sage) {
-      this.loadSage(this.props.match.params.id);
+    const { selectedSageStore } = this.props;
+    if (!selectedSageStore.sage) {
+      selectedSageStore.loadSage(parseInt(this.props.match.params.id));
     }
   }
 
   componentWillReceiveProps(nextProps: Props) {
     if (this.props.match.params.id !== nextProps.match.params.id) {
-      this.loadSage(nextProps.match.params.id);
+      this.props.selectedSageStore.loadSage(parseInt(nextProps.match.params.id));
     }
   }
 
-  loadSage(id: string) {
-    SageActions.loadSage(parseInt(id));
-  }
-
   render() {
-    const { sage } = this.state;
+    const { sage } = this.props.selectedSageStore;
 
     return (
       <div className="container">

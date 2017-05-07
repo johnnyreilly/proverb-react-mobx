@@ -3,23 +3,23 @@ import { RouteComponentProps } from "react-router-dom";
 import { inject, observer } from "mobx-react";
 
 import SageThumbnail from "./SageThumbnail";
-import { SageStore } from "../../shared/stores/SageStore";
+import { SagesStore } from "../../shared/stores/SagesStore";
 import Waiting from "../../shared/components/Waiting";
 
-type Props = RouteComponentProps<{}> & { sageStore: SageStore };
+type Props = RouteComponentProps<{}> & { sagesStore: SagesStore };
 
-@inject("sageStore")
+@inject("sagesStore")
 @observer
 export default class Sages extends React.Component<Props, undefined> {
   componentDidMount() {
-    const { sageStore } = this.props;
-    if (!sageStore.sagesIsInitialised) {
-      sageStore.loadSages();
+    const { sagesStore } = this.props;
+    if (!sagesStore.sagesIsInitialised) {
+      sagesStore.loadSages();
     }
   }
 
   render() {
-    const { sagesIsInitialised, sages } = this.props.sageStore;
+    const { sagesIsInitialised, sages } = this.props.sagesStore;
 
     return (
       <div className="container">

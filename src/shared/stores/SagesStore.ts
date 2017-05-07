@@ -3,7 +3,7 @@ import {observable, action} from "mobx";
 import { SageVM } from "../domain/dtos/sage";
 import * as sageService from "../services/sageService";
 
-export class SageStore {
+export class SagesStore {
   @observable sages = new Map<number, SageVM>();
   @observable sagesIsInitialised = false;
 
@@ -16,4 +16,4 @@ export class SageStore {
   }
 }
 
-export default new SageStore();
+export default new SagesStore();

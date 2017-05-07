@@ -5,11 +5,12 @@ import { HashRouter, Route } from "react-router-dom";
 import { Provider } from "mobx-react";
 
 import App from "./features/layout/App";
-import sageStore from "./shared/stores/SageStore";
+import sagesStore from "./shared/stores/SagesStore";
+import selectedSageStore from "./shared/stores/SelectedSageStore";
 
 // __CONNECTION_URL__: JSON.stringify('http://localhost:7778/')
 
-const stores = { sageStore };
+const stores = { sagesStore, selectedSageStore };
 
 ReactDOM.render((
   <HashRouter>
