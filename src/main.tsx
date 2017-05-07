@@ -5,15 +5,15 @@ import { HashRouter, Route } from "react-router-dom";
 import { Provider } from "mobx-react";
 
 import App from "./features/layout/App";
-import AppState from "./appState";
+import sageStore from "./shared/stores/SageStore";
 
 // __CONNECTION_URL__: JSON.stringify('http://localhost:7778/')
 
-const appState = new AppState();
+const stores = { sageStore };
 
 ReactDOM.render((
   <HashRouter>
-    <Provider appState={appState}>
+    <Provider {...stores}>
       <Route component={App} />
     </Provider>
   </HashRouter>

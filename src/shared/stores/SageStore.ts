@@ -1,9 +1,9 @@
 import {observable, action} from "mobx";
 
-import { SageVM } from "./shared/domain/dtos/sage";
-import * as sageService from "./shared/services/sageService";
+import { SageVM } from "../domain/dtos/sage";
+import * as sageService from "../services/sageService";
 
-export default class AppState {
+class SageStore {
   @observable sages = new Map<number, SageVM>();
   @observable sagesIsInitialised = false;
 
@@ -15,3 +15,5 @@ export default class AppState {
       });
   }
 }
+
+export default new SageStore();
