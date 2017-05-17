@@ -3,7 +3,8 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var webpack = require('webpack');
-var WebpackNotifierPlugin = require('webpack-notifier');
+var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+var ForkTsCheckerNotifierWebpackPlugin  = require('fork-ts-checker-notifier-webpack-plugin');
 var webpackFailPlugin = require('webpack-fail-plugin');
 var webpackConfig = require('../webpack.config.js');
 var packageJson = require('../package.json');
@@ -27,6 +28,11 @@ function buildProduction(done) {
       compress: {
         warnings: true
       }
+    }),
+    new ForkTsCheckerWebpackPlugin({
+      blockEmit: true,
+      // tslint: true,
+      watch: ['./src', './test'] // optional but improves performance (less stat calls)
     }),
     webpackFailPlugin
   );
@@ -55,7 +61,12 @@ function createDevCompiler() {
           // __CONNECTION_URL__: JSON.stringify('http://localhost:5000/')
       }),
     new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.js' }),
-    new WebpackNotifierPlugin({ title: 'Webpack build', excludeWarnings: true })
+    new ForkTsCheckerNotifierWebpackPlugin({ title: 'Build', excludeWarnings: false }),
+    new ForkTsCheckerWebpackPlugin({
+      blockEmit: false,
+      // tslint: true,
+      watch: ['./src'] // optional but improves performance (less stat calls)
+    })
   );
 
   // create a single instance of the compiler to allow caching
