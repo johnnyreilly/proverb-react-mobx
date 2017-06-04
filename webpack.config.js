@@ -3,6 +3,7 @@
 
 var path = require('path');
 var webpack = require('webpack');
+var ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 var packageJson = require('./package.json');
 var vendorDependencies = Object.keys(packageJson['dependencies']);
@@ -63,6 +64,10 @@ module.exports = {
           "window.jQuery": "jquery",
           "jQuery": "jquery",
           "$": "jquery"
+      }),
+      new ForkTsCheckerWebpackPlugin({
+        //tslint: true,
+        //watch: ['./src', './test'] // optional but improves performance (less stat calls)
       })
   ],
   resolve: {

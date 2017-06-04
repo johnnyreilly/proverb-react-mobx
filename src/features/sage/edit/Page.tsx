@@ -1,7 +1,8 @@
 import React from "react";
 import { RouteComponentProps } from "react-router-dom";
-import FBEmitter from "fbemitter";
+import { inject, observer } from "mobx-react";
 
+import { SelectedSageStore } from "../../../shared/stores/SelectedSageStore";
 import SageStore, { SageState } from "../Store";
 import * as SageActions from "../../../shared/actions/sageActions";
 import Waiting from "../../../shared/components/Waiting";
@@ -11,7 +12,7 @@ import { inputValue, dateValue } from "../../../shared/utils/componentHelpers";
 
 type Props = RouteComponentProps<{
   id: string;
-}>;
+}> & { selectedSageStore: SelectedSageStore };
 
 interface State {
   sage: SageVM | undefined;
@@ -20,8 +21,9 @@ interface State {
   isSavingOrRemoving: "Saving..." | "Removing..." | undefined;
 }
 
+@inject("selectedSageStore")
+@observer
 export default class SageEdit extends React.Component<Props, State> {
-  eventSubscription: FBEmitter.EventSubscription;
   constructor(props: Props) {
     super(props);
     this.state = Object.assign(
@@ -49,28 +51,17 @@ export default class SageEdit extends React.Component<Props, State> {
       : { sage: undefined, validations: new Map() };
   }
 
-  componentWillMount() {
-    this.eventSubscription = SageStore.addChangeListener(this._onChange);
-  }
-
-  componentWillUnmount() {
-    this.eventSubscription.remove();
-  }
-
   componentDidMount() {
+    const { selectedSageStore } = this.props;
     if (!this.state.sage) {
-      this.loadSage(this.props.match.params.id);
+      selectedSageStore.loadSage(parseInt(this.props.match.params.id));
     }
   }
 
   componentWillReceiveProps(nextProps: Props) {
     if (this.props.match.params.id !== nextProps.match.params.id) {
-      this.loadSage(nextProps.match.params.id);
+      this.props.selectedSageStore.loadSage(parseInt(nextProps.match.params.id));
     }
-  }
-
-  loadSage(id: string) {
-    SageActions.loadSage(parseInt(id));
   }
 
   _onFieldChange = (event: React.FormEvent<any>) => {
