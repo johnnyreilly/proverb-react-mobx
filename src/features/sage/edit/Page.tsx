@@ -3,8 +3,6 @@ import { RouteComponentProps } from "react-router-dom";
 import { inject, observer } from "mobx-react";
 
 import { SelectedSageStore } from "../../../shared/stores/SelectedSageStore";
-import SageStore, { SageState } from "../Store";
-import * as SageActions from "../../../shared/actions/sageActions";
 import Waiting from "../../../shared/components/Waiting";
 import FormControls from "../../../shared/components/FormControls";
 import { SageVM } from "../../../shared/domain/dtos/sage";
@@ -27,24 +25,24 @@ export default class SageEdit extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = Object.assign(
-      this.getSageAndValidationsFromStore(props.match.params.id, SageStore.getState()),
+      this.getSageAndValidationsFromStore(props.match.params.id, props.selectedSageStore),
       { hasChanges: false, isSavingOrRemoving: undefined });
   }
 
   _onChange = () => {
-    const state = SageStore.getState();
-    if (state.savedId) {
+    const { selectedSageStore } = this.props;
+    if (selectedSageStore.savedId) {
       this.props.history.push(`/sage/detail/${this.props.match.params.id}`);
     } else {
       this.setState((prevState, props) => Object.assign(
         prevState,
-        this.getSageAndValidationsFromStore(props.match.params.id, state),
+        this.getSageAndValidationsFromStore(props.match.params.id, selectedSageStore),
         { isSavingOrRemoving: undefined }
       )); // TODO: Do something more sophisticated?
     }
   }
 
-  getSageAndValidationsFromStore(id: string, storeState: SageState) {
+  getSageAndValidationsFromStore(id: string, storeState: SelectedSageStore) {
     const idNum = parseInt(id);
     return storeState.sage && storeState.sage.id === idNum
       ? { sage: storeState.sage, validations: storeState.validations }
@@ -78,7 +76,7 @@ export default class SageEdit extends React.Component<Props, State> {
     event.preventDefault();
 
     if (this.canSave) {
-      SageActions.saveSage(this.state.sage!);
+      this.props.selectedSageStore.saveSage(this.state.sage!);
       this.setState((prevState, _props) => Object.assign(
         prevState,
         { isSavingOrRemoving: "Saving..." }
@@ -90,7 +88,7 @@ export default class SageEdit extends React.Component<Props, State> {
     event.preventDefault();
 
     if (this.canRemove) {
-      SageActions.removeSage(this.state.sage!.id);
+      // this.props.selectedSageStore.removeSage(this.state.sage!.id);
       this.setState((prevState, _props) => Object.assign(
         prevState,
         { isSavingOrRemoving: "Removing..." }
