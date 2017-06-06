@@ -65,10 +65,7 @@ module.exports = {
           "jQuery": "jquery",
           "$": "jquery"
       }),
-      new ForkTsCheckerWebpackPlugin({
-        //tslint: true,
-        //watch: ['./src', './test'] // optional but improves performance (less stat calls)
-      })
+      new ForkTsCheckerWebpackPlugin()
   ],
   resolve: {
     // Add `.ts` and `.tsx` as a resolvable extension.
