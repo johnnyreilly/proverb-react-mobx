@@ -16,7 +16,6 @@ interface State {
   sage: SageVM | undefined;
   validations: Map<string, string>;
   hasChanges: boolean;
-  isSavingOrRemoving: "Saving..." | "Removing..." | undefined;
 }
 
 @inject("selectedSageStore")
@@ -29,15 +28,16 @@ export default class SageEdit extends React.Component<Props, State> {
       { hasChanges: false, isSavingOrRemoving: undefined });
   }
 
-  _onChange = () => {
+  componentWillReact() {
     const { selectedSageStore } = this.props;
     if (selectedSageStore.savedId) {
-      this.props.history.push(`/sage/detail/${this.props.match.params.id}`);
-    } else {
+      const { savedId } = selectedSageStore;
+      this.props.history.push(`/sage/detail/${savedId}`);
+      selectedSageStore.savedId = undefined;
+    } else if (selectedSageStore.validations || selectedSageStore.sage) {
       this.setState((prevState, props) => Object.assign(
         prevState,
-        this.getSageAndValidationsFromStore(props.match.params.id, selectedSageStore),
-        { isSavingOrRemoving: undefined }
+        this.getSageAndValidationsFromStore(props.match.params.id, selectedSageStore)
       )); // TODO: Do something more sophisticated?
     }
   }
@@ -77,10 +77,6 @@ export default class SageEdit extends React.Component<Props, State> {
 
     if (this.canSave) {
       this.props.selectedSageStore.saveSage(this.state.sage!);
-      this.setState((prevState, _props) => Object.assign(
-        prevState,
-        { isSavingOrRemoving: "Saving..." }
-      ));
     }
   }
 
@@ -89,10 +85,6 @@ export default class SageEdit extends React.Component<Props, State> {
 
     if (this.canRemove) {
       // this.props.selectedSageStore.removeSage(this.state.sage!.id);
-      this.setState((prevState, _props) => Object.assign(
-        prevState,
-        { isSavingOrRemoving: "Removing..." }
-      ));
     }
   }
 
@@ -105,18 +97,19 @@ export default class SageEdit extends React.Component<Props, State> {
   }
 
   get isSavingOrRemoving(): boolean {
-    return !!this.state.isSavingOrRemoving;
+    return !!this.props.selectedSageStore.isWaiting;
   }
 
   render() {
-    const { sage, hasChanges, validations, isSavingOrRemoving } = this.state;
+    const { sage, hasChanges, validations } = this.state;
+    const { selectedSageStore: { isWaiting } } = this.props;
 
     return (
       <div className="container">
         {sage
           ? <form name="form" role="form">
             <div>
-              {isSavingOrRemoving ? <Waiting caption={isSavingOrRemoving} /> : null}
+              {isWaiting ? <Waiting caption={isWaiting} /> : null}
 
               <button className="btn btn-info" disabled={!this.canSave} onClick={this._onClickSave}>
                 <i className="fa fa-save fa-lg" /> Save
